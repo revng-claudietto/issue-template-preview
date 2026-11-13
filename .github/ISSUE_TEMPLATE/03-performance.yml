@@ -1,0 +1,153 @@
+#
+# This file is distributed under the MIT License. See LICENSE.md for details.
+#
+
+name: Performance problem
+description: rev.ng is too slow or runs out of memory.
+labels: ["performance"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a performance problem!
+
+        Please use a title that names the command, the binary and how bad the problem is. Format identifiers as code.
+
+        > [!TIP]
+        > Write `` `emit-c-as-single-file` runs out of 16 GiB of memory on a 5 MB `.dll` with 100 KB of `.text` ``, not "Analysis extremely slow" or "Gets stuck".
+
+        **Every report needs a reproducer: the exact binary you ran rev.ng on.** We fix bugs by reproducing them. Without the binary we cannot do that, and the issue will be closed.
+
+  - type: input
+    id: version
+    attributes:
+      label: rev.ng version
+      description: The output of `revng --version`. To update, run the binary distribution `install.sh` again, `docker pull revng/revng`, or `orc update` followed by `orc install revng`.
+      placeholder: rev.ng version 1234567
+    validations:
+      required: true
+
+  - type: dropdown
+    id: installation
+    attributes:
+      label: Installation method
+      options:
+        - Binary distribution
+        - Docker image (revng/revng)
+        - orchestra
+    validations:
+      required: true
+
+  - type: textarea
+    id: commands
+    attributes:
+      label: Commands
+      description: The exact `revng` commands you ran, starting from the binary, so we can run them on the reproducer.
+      placeholder: revng quick artifact emit-c-as-single-file ./program -o program.c
+      render: shell
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Size of the binary
+
+        The time and memory rev.ng needs depend mostly on the amount of code. Tell us the size of the binary (`wc -c < BINARY` on Linux and macOS, `(Get-Item BINARY).Length` in PowerShell) and the size of its code:
+
+        | Format  | Command | What to report |
+        |---------|---------|----------------|
+        | ELF     | `size -A -d BINARY` | the `.text` row |
+        | PE/COFF | `llvm-size -A -d BINARY` or, on Windows, `dumpbin /headers BINARY` | the `.text` row, or the `size of code` line |
+        | Mach-O  | `size -m BINARY` on macOS, `llvm-size -m BINARY` elsewhere | the `Section __text` line |
+
+        If there are other executable sections, report them as well: `llvm-objdump -h BINARY` lists them, on any format, with type `TEXT`.
+
+  - type: input
+    id: binary-size
+    attributes:
+      label: Binary size
+      placeholder: 5242880 bytes
+    validations:
+      required: true
+
+  - type: input
+    id: code-size
+    attributes:
+      label: Code size
+      placeholder: ".text: 102400 bytes"
+    validations:
+      required: true
+
+  - type: textarea
+    id: resources
+    attributes:
+      label: Time and memory
+      description: How long the command ran, or after how long you stopped it, how much memory it used, and the CPU and RAM of the machine. On Linux, `/usr/bin/time -v COMMAND` reports the time and the peak memory (`Maximum resident set size`).
+      placeholder: |
+        Stopped after 24 hours, using 9.8 GiB of memory.
+        AMD Ryzen 9 3900X, 64 GiB of RAM.
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Execution trace
+
+        An execution trace tells us where the time goes. Run your command again with `-- --trace=trace.json` at the end, for instance:
+
+        ```sh
+        revng quick artifact emit-c-as-single-file BINARY -o program.c -- --trace=trace.json
+        ```
+
+        If it never ends, interrupt it with Ctrl-C after a while: the trace is saved anyway. Compress it with `gzip -9 trace.json` and attach `trace.json.gz` below. You can explore it yourself by opening it in [Perfetto UI](https://ui.perfetto.dev).
+
+  - type: textarea
+    id: trace
+    attributes:
+      label: Trace
+      description: The compressed `trace.json.gz`.
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Reproducer
+
+        Attach the binary in the field below. GitHub does not accept executables: put the binary in a `.zip` archive (for instance `zip reproducer.zip ./program`) and drag the archive into the field. If it is larger than 25 MB, upload it somewhere that does not require logging in and paste the link.
+
+        If you cannot attach the binary publicly, send it to `info@rev.ng` and mention the issue.
+
+        **If neither is possible, we cannot work on the issue and we will close it.**
+
+  - type: textarea
+    id: reproducer
+    attributes:
+      label: Reproducer
+      description: The zipped binary, or a note that you sent it to `info@rev.ng`. Also tell us where the binary comes from or, if you compiled it, the compiler, its version and the flags.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: recap
+    attributes:
+      label: Final recap
+      description: |
+        This issue tracker is for bugs we can reproduce and fix. If you have a question or need help using rev.ng, read the [documentation](https://docs.rev.ng) and ask on [Discord](https://discord.gg/wEQtgKJxcX) or [Discourse](https://discuss.rev.ng/) instead. Before opening an issue, search the [existing ones](https://github.com/revng/revng/issues?q=is%3Aissue) and make sure you installed rev.ng [as documented](https://docs.rev.ng/user-manual/initial-setup/).
+      options:
+        - label: "I assert that this is a bug and not a question or a support request."
+          required: true
+        - label: "I assert that this is not a duplicate of an existing issue."
+          required: true
+        - label: "I assert that I installed rev.ng as documented: binary distribution, Docker image or orchestra. Other ways of building rev.ng are not supported."
+          required: true
+        - label: "I assert that the problem still happens with the latest version of rev.ng."
+          required: true
+        - label: "I assert that this issue reports a single problem. I will open a separate issue for each other problem."
+          required: true
+        - label: "I assert that I attached the binary or sent it to info@rev.ng, and that my links can be opened without logging in. I understand that issues without a reproducer will be closed."
+          required: true
+        - label: "I assert that I reported the size of the binary and of its code."
+          required: true
+        - label: "I assert that I reported the exact commands and their output as text, not as screenshots."
+          required: true

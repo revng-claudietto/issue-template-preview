@@ -1,0 +1,116 @@
+#
+# This file is distributed under the MIT License. See LICENSE.md for details.
+#
+
+name: Wrong decompiled output
+description: The decompiled code is incorrect or does not compile.
+labels: ["misdecompilation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a wrong result!
+
+        Please use a title that names what is wrong in the output. Format identifiers as code.
+
+        > [!TIP]
+        > Write `` Assignment of a `generic8_t *` to `generic64_t` `` or `` Wrong `case` values in the `switch` of `parse_args` ``, not "Bad decompilation" or "Issues about switch-case statements".
+
+        **Every report needs a reproducer: the exact binary you ran rev.ng on.** We fix bugs by reproducing them. Without the binary we cannot do that, and the issue will be closed.
+
+  - type: input
+    id: version
+    attributes:
+      label: rev.ng version
+      description: The output of `revng --version`. To update, run the binary distribution `install.sh` again, `docker pull revng/revng`, or `orc update` followed by `orc install revng`.
+      placeholder: rev.ng version 1234567
+    validations:
+      required: true
+
+  - type: dropdown
+    id: installation
+    attributes:
+      label: Installation method
+      options:
+        - Binary distribution
+        - Docker image (revng/revng)
+        - orchestra
+    validations:
+      required: true
+
+  - type: textarea
+    id: commands
+    attributes:
+      label: Commands
+      description: The exact `revng` commands you ran, starting from the binary, so we can run them on the reproducer.
+      placeholder: revng quick artifact emit-c-as-single-file ./program -o program.c
+      render: shell
+    validations:
+      required: true
+
+  - type: input
+    id: function
+    attributes:
+      label: Function
+      description: The name or the address of the function where the problem shows up.
+      placeholder: parse_args, 0x401136
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Decompiled code
+      description: The part of the output that is wrong, trimmed to the lines that matter. If the code does not compile, include the compiler errors too.
+      render: c
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+      description: What the code should look like, or why it is wrong. Quote the original source code, if you have it, in a code block.
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Reproducer
+
+        Attach the binary in the field below. GitHub does not accept executables: put the binary in a `.zip` archive (for instance `zip reproducer.zip ./program`) and drag the archive into the field. If it is larger than 25 MB, upload it somewhere that does not require logging in and paste the link.
+
+        If you cannot attach the binary publicly, send it to `info@rev.ng` and mention the issue.
+
+        **If neither is possible, we cannot work on the issue and we will close it.**
+
+  - type: textarea
+    id: reproducer
+    attributes:
+      label: Reproducer
+      description: The zipped binary, or a note that you sent it to `info@rev.ng`. Also tell us where the binary comes from or, if you compiled it, the compiler, its version and the flags.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: recap
+    attributes:
+      label: Final recap
+      description: |
+        This issue tracker is for bugs we can reproduce and fix. If you have a question or need help using rev.ng, read the [documentation](https://docs.rev.ng) and ask on [Discord](https://discord.gg/wEQtgKJxcX) or [Discourse](https://discuss.rev.ng/) instead. Before opening an issue, search the [existing ones](https://github.com/revng/revng/issues?q=is%3Aissue) and make sure you installed rev.ng [as documented](https://docs.rev.ng/user-manual/initial-setup/).
+      options:
+        - label: "I assert that this is a bug and not a question or a support request."
+          required: true
+        - label: "I assert that this is not a duplicate of an existing issue."
+          required: true
+        - label: "I assert that I installed rev.ng as documented: binary distribution, Docker image or orchestra. Other ways of building rev.ng are not supported."
+          required: true
+        - label: "I assert that the problem still happens with the latest version of rev.ng."
+          required: true
+        - label: "I assert that this issue reports a single problem. I will open a separate issue for each other problem."
+          required: true
+        - label: "I assert that I attached the binary or sent it to info@rev.ng, and that my links can be opened without logging in. I understand that issues without a reproducer will be closed."
+          required: true
+        - label: "I assert that I reported the exact commands, the wrong code and the expected result as text, not as screenshots."
+          required: true
