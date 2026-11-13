@@ -84,13 +84,12 @@ body:
     id: recap
     attributes:
       label: Final recap
-      description: Questions go on [Discord](https://discord.gg/wEQtgKJxcX) or [Discourse](https://discuss.rev.ng/). See also the [installation docs](https://docs.rev.ng/user-manual/initial-setup/) and the [existing issues](https://github.com/revng/revng/issues?q=is%3Aissue).
       options:
-        - label: "This is a bug, not a question or a support request."
+        - label: "This is a bug, not a question or a support request (those go on [Discord](https://discord.gg/wEQtgKJxcX) or [Discourse](https://discuss.rev.ng/))."
           required: true
-        - label: "This is not a duplicate of an existing issue."
+        - label: "This is not a duplicate of an [existing issue](https://github.com/revng/revng/issues?q=is%3Aissue)."
           required: true
-        - label: "I installed rev.ng as documented (binary distribution, Docker image or orchestra)."
+        - label: "I installed rev.ng [as documented](https://docs.rev.ng/user-manual/initial-setup/) (binary distribution, Docker image or orchestra)."
           required: true
         - label: "The problem still happens with the latest version of rev.ng."
           required: true
