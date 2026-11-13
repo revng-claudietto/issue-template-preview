@@ -34,7 +34,7 @@ body:
     id: reproducer
     attributes:
       label: Reproducer
-      description: Zip the binary and attach it, email it to `info@rev.ng`, or link the smallest crash with the same stack trace on [mass.rev.ng](https://mass.rev.ng/crashes.html) (search its *Stacktrace* ID, sort by *.text size*).
+      description: Zip the binary and attach it, or email it to `info@rev.ng`.
       placeholder: Drop reproducer.zip here
     validations:
       required: true
@@ -79,7 +79,7 @@ body:
           required: true
         - label: "This issue reports a single problem."
           required: true
-        - label: "I attached the binary, emailed it to info@rev.ng, or linked the smallest crash with the same stack trace on mass.rev.ng. Links open without logging in. Issues without a reproducer will be closed."
+        - label: "I attached the binary or emailed it to info@rev.ng. Links open without logging in. Issues without a reproducer will be closed."
           required: true
         - label: "Commands and output are text, not screenshots."
           required: true
