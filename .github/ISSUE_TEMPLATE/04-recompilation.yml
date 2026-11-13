@@ -9,26 +9,18 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to report a problem!
-
         > [!NOTE]
-        > Static binary translation has not been a core goal of rev.ng for a long time: we are focused on decompilation. We now use static binary translation mostly for regression testing, so these issues are marked as low priority. We fix bugs, and simple programs should work, but we have no short- or mid-term plans to extend it, for instance to translate a program to another architecture.
+        > Static binary translation has not been a core goal for a long time: we are focused on decompilation and use it mostly for regression testing. These issues are low priority: we fix bugs, but we don't plan to extend it.
 
-        This template is for static binary translation: turning the input binary into a new executable with `revng quick artifact recompile` (formerly `revng translate`). If the decompiled C code is wrong or does not compile, use the *Wrong decompiled output* template instead.
+        This is for `revng quick artifact recompile`. Wrong or non-compiling decompiled C goes in *Wrong decompiled output*.
 
-        Please use a title that names the failure and the binary it happens on. Format identifiers as code.
-
-        > [!TIP]
-        > Write `` `Exception: __libc_start_main` in translated hello world using glibc `` or `` "undefined reference" when translating a simple `arm-linux-gnueabihf` hello world ``, not "Cannot translate executable".
-
-        **Every report needs a reproducer: the exact binary you ran rev.ng on.** We fix bugs by reproducing them. Without the binary we cannot do that, and the issue will be closed.
+        **A reproducer binary is mandatory: issues without one will be closed.**
 
   - type: input
     id: version
     attributes:
       label: rev.ng version
-      description: The output of `revng --version`. To update, run the binary distribution `install.sh` again, `docker pull revng/revng`, or `orc update` followed by `orc install revng`.
-      placeholder: rev.ng version 1234567
+      placeholder: revng --version
     validations:
       required: true
 
@@ -44,10 +36,26 @@ body:
       required: true
 
   - type: textarea
+    id: reproducer
+    attributes:
+      label: Reproducer
+      description: Zip the binary and attach it, or email it to `info@rev.ng`.
+      placeholder: Drop reproducer.zip here
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem description
+      description: Does rev.ng fail, or does the translated program misbehave?
+    validations:
+      required: true
+
+  - type: textarea
     id: commands
     attributes:
       label: Commands
-      description: The exact commands you ran, starting from the binary, including how you ran the translated program.
       placeholder: |
         revng quick artifact recompile ./program -o program.translated
         chmod +x program.translated
@@ -57,38 +65,11 @@ body:
       required: true
 
   - type: textarea
-    id: description
-    attributes:
-      label: What happened
-      description: Did rev.ng fail to produce the executable, or does the translated program behave differently from the original? In the latter case, show what the original program does.
-    validations:
-      required: true
-
-  - type: textarea
     id: output
     attributes:
       label: Output
-      description: The full output, including any error message and stack trace. If it does not fit, attach it as `output.log` in the Reproducer field.
+      description: Error message and full stack trace, or the output of both programs.
       render: text
-    validations:
-      required: true
-
-  - type: markdown
-    attributes:
-      value: |
-        ### Reproducer
-
-        Attach the binary in the field below. GitHub does not accept executables: put the binary in a `.zip` archive (for instance `zip reproducer.zip ./program`) and drag the archive into the field. If it is larger than 25 MB, upload it somewhere that does not require logging in and paste the link.
-
-        If you cannot attach the binary publicly, send it to `info@rev.ng` and mention the issue.
-
-        **If neither is possible, we cannot work on the issue and we will close it.**
-
-  - type: textarea
-    id: reproducer
-    attributes:
-      label: Reproducer
-      description: The zipped binary, or a note that you sent it to `info@rev.ng`. Also tell us where the binary comes from or, if you compiled it, the compiler, its version and the flags.
     validations:
       required: true
 
@@ -96,22 +77,21 @@ body:
     id: recap
     attributes:
       label: Final recap
-      description: |
-        This issue tracker is for bugs we can reproduce and fix. If you have a question or need help using rev.ng, read the [documentation](https://docs.rev.ng) and ask on [Discord](https://discord.gg/wEQtgKJxcX) or [Discourse](https://discuss.rev.ng/) instead. Before opening an issue, search the [existing ones](https://github.com/revng/revng/issues?q=is%3Aissue) and make sure you installed rev.ng [as documented](https://docs.rev.ng/user-manual/initial-setup/).
+      description: Questions go on [Discord](https://discord.gg/wEQtgKJxcX) or [Discourse](https://discuss.rev.ng/). See also the [installation docs](https://docs.rev.ng/user-manual/initial-setup/) and the [existing issues](https://github.com/revng/revng/issues?q=is%3Aissue).
       options:
-        - label: "I assert that this is a bug and not a question or a support request."
+        - label: "This is a bug, not a question or a support request."
           required: true
-        - label: "I assert that this is not a duplicate of an existing issue."
+        - label: "This is not a duplicate of an existing issue."
           required: true
-        - label: "I assert that I installed rev.ng as documented: binary distribution, Docker image or orchestra. Other ways of building rev.ng are not supported."
+        - label: "I installed rev.ng as documented (binary distribution, Docker image or orchestra)."
           required: true
-        - label: "I assert that the problem still happens with the latest version of rev.ng."
+        - label: "The problem still happens with the latest version of rev.ng."
           required: true
-        - label: "I assert that this issue reports a single problem. I will open a separate issue for each other problem."
+        - label: "This issue reports a single problem."
           required: true
-        - label: "I assert that I attached the binary or sent it to info@rev.ng, and that my links can be opened without logging in. I understand that issues without a reproducer will be closed."
+        - label: "I attached the binary or emailed it to info@rev.ng. Links open without logging in. Issues without a reproducer will be closed."
           required: true
-        - label: "I assert that I reported the exact commands and their full output as text, not as screenshots."
+        - label: "Commands and output are text, not screenshots."
           required: true
         - label: "I understand that static binary translation is low priority."
           required: true

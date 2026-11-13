@@ -9,21 +9,13 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to report a crash!
-
-        Please use a title that names the failure, such as the assertion message or the function in the stack trace, and the binary it happens on. Format identifiers as code.
-
-        > [!TIP]
-        > Write `` Crash: `not AtLeastAMatch` in `IsolateFunctionsImpl::handleAnyPCJumps` on ARM ELF `` or `` `A phi has appeared in the dispatcher` on 7M `x86` `.exe` ``, not "Crash when decompiling" or "Can't process my exe".
-
-        **Every report needs a reproducer: the exact binary you ran rev.ng on.** We fix bugs by reproducing them. Without the binary we cannot do that, and the issue will be closed.
+        **A reproducer binary is mandatory: issues without one will be closed.**
 
   - type: input
     id: version
     attributes:
       label: rev.ng version
-      description: The output of `revng --version`. To update, run the binary distribution `install.sh` again, `docker pull revng/revng`, or `orc update` followed by `orc install revng`.
-      placeholder: rev.ng version 1234567
+      placeholder: revng --version
     validations:
       required: true
 
@@ -39,10 +31,25 @@ body:
       required: true
 
   - type: textarea
+    id: reproducer
+    attributes:
+      label: Reproducer
+      description: Zip the binary and attach it, email it to `info@rev.ng`, or link the smallest crash with the same stack trace on [mass.rev.ng](https://mass.rev.ng/crashes.html) (search its *Stacktrace* ID, sort by *.text size*).
+      placeholder: Drop reproducer.zip here
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem description
+    validations:
+      required: true
+
+  - type: textarea
     id: commands
     attributes:
       label: Commands
-      description: The exact `revng` commands you ran, starting from the binary, so we can run them on the reproducer.
       placeholder: revng quick artifact emit-c-as-single-file ./program -o program.c
       render: shell
     validations:
@@ -52,34 +59,8 @@ body:
     id: output
     attributes:
       label: Output
-      description: The full output, including the error message and the stack trace. If it does not fit, attach it as `output.log` in the Reproducer field.
+      description: Error message and full stack trace.
       render: text
-    validations:
-      required: true
-
-  - type: markdown
-    attributes:
-      value: |
-        ### Reproducer
-
-        Attach the binary in the field below. GitHub does not accept executables: put the binary in a `.zip` archive (for instance `zip reproducer.zip ./program`) and drag the archive into the field. If it is larger than 25 MB, upload it somewhere that does not require logging in and paste the link.
-
-        If you cannot attach the binary publicly, send it to `info@rev.ng` and mention the issue.
-
-        If you cannot share the binary at all, link a crash from our mass testing instead:
-
-        1. Open [mass.rev.ng/crashes.html](https://mass.rev.ng/crashes.html).
-        2. Find a crash with the same stack trace as yours (*Actions* > *View log* shows the log of each crash).
-        3. Type its *Stacktrace* ID in the search box and sort by *.text size*, smallest first.
-        4. Link the first row (*Actions* > *Open details*).
-
-        **If none of the above is possible, we cannot work on the issue and we will close it.**
-
-  - type: textarea
-    id: reproducer
-    attributes:
-      label: Reproducer
-      description: The zipped binary, a note that you sent it to `info@rev.ng`, or a mass.rev.ng link. Also tell us where the binary comes from or, if you compiled it, the compiler, its version and the flags.
     validations:
       required: true
 
@@ -87,20 +68,19 @@ body:
     id: recap
     attributes:
       label: Final recap
-      description: |
-        This issue tracker is for bugs we can reproduce and fix. If you have a question or need help using rev.ng, read the [documentation](https://docs.rev.ng) and ask on [Discord](https://discord.gg/wEQtgKJxcX) or [Discourse](https://discuss.rev.ng/) instead. Before opening an issue, search the [existing ones](https://github.com/revng/revng/issues?q=is%3Aissue) and make sure you installed rev.ng [as documented](https://docs.rev.ng/user-manual/initial-setup/).
+      description: Questions go on [Discord](https://discord.gg/wEQtgKJxcX) or [Discourse](https://discuss.rev.ng/). See also the [installation docs](https://docs.rev.ng/user-manual/initial-setup/) and the [existing issues](https://github.com/revng/revng/issues?q=is%3Aissue).
       options:
-        - label: "I assert that this is a bug and not a question or a support request."
+        - label: "This is a bug, not a question or a support request."
           required: true
-        - label: "I assert that this is not a duplicate of an existing issue."
+        - label: "This is not a duplicate of an existing issue."
           required: true
-        - label: "I assert that I installed rev.ng as documented: binary distribution, Docker image or orchestra. Other ways of building rev.ng are not supported."
+        - label: "I installed rev.ng as documented (binary distribution, Docker image or orchestra)."
           required: true
-        - label: "I assert that the problem still happens with the latest version of rev.ng."
+        - label: "The problem still happens with the latest version of rev.ng."
           required: true
-        - label: "I assert that this issue reports a single problem. I will open a separate issue for each other problem."
+        - label: "This issue reports a single problem."
           required: true
-        - label: "I assert that I attached the binary, sent it to info@rev.ng, or linked the smallest crash with the same stack trace on mass.rev.ng, and that my links can be opened without logging in. I understand that issues without a reproducer will be closed."
+        - label: "I attached the binary, emailed it to info@rev.ng, or linked the smallest crash with the same stack trace on mass.rev.ng. Links open without logging in. Issues without a reproducer will be closed."
           required: true
-        - label: "I assert that I reported the exact commands and their full output as text, not as screenshots."
+        - label: "Commands and output are text, not screenshots."
           required: true
