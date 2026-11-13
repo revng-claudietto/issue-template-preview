@@ -24,7 +24,7 @@ body:
     attributes:
       label: Installation method
       options:
-        - Binary distribution
+        - Binary distribution (install.sh)
         - Docker image (revng/revng)
         - orchestra
     validations:
